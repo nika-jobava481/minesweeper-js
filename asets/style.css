@@ -16,12 +16,11 @@ body main .board-container .board {
 }
 body main .board-container .board .cell {
   border: 1px solid black;
-  /* padding: 10px 12px; */
   text-align: center;
   cursor: pointer;
-  height: 35px;
   width: 35px;
-
+  height: 35px;
+  line-height: 14px;
 }
 body main .board-container .board .cell:hover {
   background-color: antiquewhite;

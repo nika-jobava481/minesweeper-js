@@ -19,9 +19,12 @@ body {
 
                 .cell{
                     border: 1px solid black;
-                    padding: 10px 12px;
+                    // padding: 10px 12px;
                     text-align: center;
                     cursor: pointer;
+                    width: 35px;
+                    height: 35px;
+                    line-height: 14px;
 
                     &:hover{
                         background-color: antiquewhite;
