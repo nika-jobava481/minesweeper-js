@@ -7,7 +7,6 @@ function addBombs() {
     for (let i = 0; i < 99; i++) {
         setBomb()
     }
-    console.log(bombsPositions)
 }
 
 function setBomb() {
@@ -26,17 +25,30 @@ function getSurroundingCells(x, y) {
 
     for (let i = x - 1; i <= x + 1; i++) {
         for (let j = y - 1; j <= y + 1; j++) {
-            if (i !== x || j !== y) {
-                surroundings.push({ x: i, y: j });
+            if (i >= 0 && i < 30 && j >= 0 && j < 16) {
+                surroundings.push([i, j]);
             }
         }
     }
 
+
+
+
     return surroundings;
 }
 
-console.log('surr: ', getSurroundingCells(4,6))
+function showSurroundings(surroundings, un = false) {
+    // const color = un ? '#F0F0F0' : 'antiquewhite'
 
+    // for (let cell of surroundings) {
+    //     document.querySelector(`button[data-x="${cell[0]}"][data-y="${cell[1]}"]`).style.backgroundColor = color;
+    // }
+
+}
+
+function checkIfNum(inp) {
+    return !isNaN(parseFloat(inp)) && isFinite(inp);
+}
 
 
 function drawBoard() {
@@ -49,10 +61,12 @@ function drawBoard() {
             let cell = line[j];
             let c = document.createElement('button');
             c.classList.add('cell');
-            c.dataset.x = j + 1;
-            c.dataset.y = i + 1;
+            c.dataset.x = j;
+            c.dataset.y = i;
 
             c.addEventListener('click', clickEvent);
+            c.addEventListener('mouseover', hoverEvent);
+            c.addEventListener('mouseout', unhoverEvent);
 
             c.textContent = cell;
             row.appendChild(c);
@@ -62,14 +76,48 @@ function drawBoard() {
     }
 }
 
-function clickEvent(){
+function clickEvent() {
+    const X = Number(this.dataset.x)
+    const Y = Number(this.dataset.y)
     console.log(`Clicked cell at position (${this.dataset.x}, ${this.dataset.y}) with content: ${this.textContent}`);
     // console.log(this)
+    console.log(getSurroundingCells(X, Y))
+}
+
+function setNumbers(){
+
+    let surroundings = []
+
+    for(let bomb of bombsPositions){
+        surroundings.push(getSurroundingCells(bomb[1],bomb[0]))
+    }
+
+    surroundings = surroundings.flat()
 
 
+
+    for(let cell of surroundings){
+        const current = document.querySelector(`button[data-x="${cell[0]}"][data-y="${cell[1]}"]`)
+        if(checkIfNum(current.textContent)){
+            current.textContent = Number(current.textContent)+1;
+            current.style.backgroundColor = 'red'
+        }
+    }
+}
+
+function hoverEvent() {
+    const X = Number(this.dataset.x)
+    const Y = Number(this.dataset.y)
+    showSurroundings(getSurroundingCells(X, Y))
+}
+function unhoverEvent() {
+    const X = Number(this.dataset.x)
+    const Y = Number(this.dataset.y)
+    showSurroundings(getSurroundingCells(X, Y), true)
 }
 
 
 
 addBombs()
 drawBoard()
+setNumbers()
